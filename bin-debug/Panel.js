@@ -4,6 +4,7 @@ var Panel = (function (_super) {
         _super.call(this);
         this.McCree = new Hero("McCree", true);
         this.Soilder76 = new Hero("Soilder76", true);
+        this.Tracer = new Hero("Tracer", true);
         this.sword = new Equipments("sword", 50);
         this.armor = new Equipments("armor", 10);
         this.gun = new Equipments("gun", 70);
@@ -33,7 +34,8 @@ var Panel = (function (_super) {
         this.bagPanel.graphics.drawRect(0, 0, 600, 100);
         this.bagPanel.graphics.endFill();
         this.addChild(this.bagPanel);
-        User.user.heroes.push(this.McCree);
+        //初始化用户状态
+        User.user.heroes.push(this.McCree, this.Tracer);
         this.McCree.equipments.push(this.sword);
         this.Soilder76.equipments.push(this.gun);
         this.sword.jewel.push(this.blueJewel);
@@ -58,6 +60,8 @@ var Panel = (function (_super) {
         this.bag3.textColor = 0xffffff;
         this.bag3.x = this.bagPanel.x + 410;
         this.bag3.y = this.bagPanel.y + 35;
+        this.bag3.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onBagClick, this);
+        this.bag3.touchEnabled = true;
         this.addChild(this.bag3);
         this.init();
         this.heroInTeam.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onHeroesClick, this);
@@ -73,7 +77,7 @@ var Panel = (function (_super) {
         this.addChild(this.fightPower);
         this.heroInTeam.text = "在阵英雄：";
         User.user.heroesInTeam.forEach(function (e) {
-            console.log(e.heroName);
+            //console.log(e.heroName);
             _this.heroInTeam.text += e.heroName;
         });
         this.heroInTeam.y = 60;
@@ -104,10 +108,25 @@ var Panel = (function (_super) {
             User.user.heroes.push(this.McCree);
             e.target.text = null;
         }
+        else if (e.target.text == "Tracer") {
+            User.user.heroes.push(this.Tracer);
+            e.target.text = null;
+        }
         this.init();
     };
     p.onHeroesClick = function (e) {
-        this.bag3.text = User.user.heroes.pop().heroName;
+        if (this.bag1.text == "") {
+            this.bag1.text = User.user.heroes.pop().heroName;
+        }
+        else if (this.bag2.text == "") {
+            this.bag2.text = User.user.heroes.pop().heroName;
+        }
+        else if (this.bag3.text == "") {
+            this.bag3.text = User.user.heroes.pop().heroName;
+        }
+        else {
+            console.warn("full bag");
+        }
         this.init();
     };
     p.change = function (changeSth) {

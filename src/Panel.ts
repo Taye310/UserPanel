@@ -1,6 +1,7 @@
 class Panel extends egret.DisplayObjectContainer {
     McCree = new Hero("McCree", true);
     Soilder76 = new Hero("Soilder76", true);
+    Tracer=new Hero("Tracer",true);
     sword = new Equipments("sword", 50);
     armor = new Equipments("armor", 10);
     gun = new Equipments("gun", 70);
@@ -19,6 +20,7 @@ class Panel extends egret.DisplayObjectContainer {
     bag2 = new egret.TextField;
     bag3 = new egret.TextField;
 
+
     private propertyPanel: egret.Shape = new egret.Shape;
     private bagPanel: egret.Shape = new egret.Shape;
     constructor() {
@@ -36,8 +38,8 @@ class Panel extends egret.DisplayObjectContainer {
         this.bagPanel.graphics.drawRect(0, 0, 600, 100);
         this.bagPanel.graphics.endFill();
         this.addChild(this.bagPanel);
-
-        User.user.heroes.push(this.McCree);
+        //初始化用户状态
+        User.user.heroes.push(this.McCree,this.Tracer);
         this.McCree.equipments.push(this.sword);
         this.Soilder76.equipments.push(this.gun);
         this.sword.jewel.push(this.blueJewel);
@@ -65,6 +67,8 @@ class Panel extends egret.DisplayObjectContainer {
         this.bag3.textColor = 0xffffff;
         this.bag3.x = this.bagPanel.x + 410;
         this.bag3.y = this.bagPanel.y + 35;
+        this.bag3.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onBagClick, this);
+        this.bag3.touchEnabled = true;
         this.addChild(this.bag3);
 
         this.init();
@@ -84,7 +88,7 @@ class Panel extends egret.DisplayObjectContainer {
 
         this.heroInTeam.text = "在阵英雄：";
         User.user.heroesInTeam.forEach((e) => {
-            console.log(e.heroName);
+            //console.log(e.heroName);
             this.heroInTeam.text += e.heroName;
         });
         this.heroInTeam.y = 60;
@@ -112,15 +116,27 @@ class Panel extends egret.DisplayObjectContainer {
         } else if (e.target.text == "armor") {
             this.McCree.equipments.push(this.armor);
             e.target.text = null;
-        }else if(e.target.text == "McCree"){
+        } else if (e.target.text == "McCree") {
             User.user.heroes.push(this.McCree);
             e.target.text = null;
+        }else if (e.target.text == "Tracer") {
+            User.user.heroes.push(this.Tracer);
+            e.target.text = null;
         }
+
         this.init();
     }
 
     onHeroesClick(e: egret.TouchEvent) {
-        this.bag3.text=User.user.heroes.pop().heroName;
+        if (this.bag1.text == "") {
+            this.bag1.text = User.user.heroes.pop().heroName;
+        } else if (this.bag2.text == "") {
+            this.bag2.text = User.user.heroes.pop().heroName;
+        } else if (this.bag3.text == "") {
+            this.bag3.text = User.user.heroes.pop().heroName;
+        } else {
+            console.warn("full bag");
+        }
         this.init();
     }
 
