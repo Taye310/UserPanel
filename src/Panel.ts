@@ -17,6 +17,7 @@ class Panel extends egret.DisplayObjectContainer {
 
     bag1 = new egret.TextField;
     bag2 = new egret.TextField;
+    bag3 = new egret.TextField;
 
     private propertyPanel: egret.Shape = new egret.Shape;
     private bagPanel: egret.Shape = new egret.Shape;
@@ -54,13 +55,23 @@ class Panel extends egret.DisplayObjectContainer {
 
         this.bag2.text = "armor";
         this.bag2.textColor = 0xffffff;
-        this.bag2.x = this.bagPanel.x + 300;
+        this.bag2.x = this.bagPanel.x + 210;
         this.bag2.y = this.bagPanel.y + 35;
         this.bag2.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onBagClick, this);
         this.bag2.touchEnabled = true;
         this.addChild(this.bag2);
 
+        this.bag3.text = "";
+        this.bag3.textColor = 0xffffff;
+        this.bag3.x = this.bagPanel.x + 410;
+        this.bag3.y = this.bagPanel.y + 35;
+        this.addChild(this.bag3);
+
         this.init();
+
+        this.heroInTeam.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onHeroesClick, this);
+        this.heroInTeam.touchEnabled = true;
+
     }
 
     init() {
@@ -88,8 +99,8 @@ class Panel extends egret.DisplayObjectContainer {
         this.equipments.y = 90;
         this.addChild(this.equipments);
 
-        this.pet.y=120;
-        this.pet.text="宠物："+User.user.pet.petName;
+        this.pet.y = 120;
+        this.pet.text = "宠物：" + User.user.pet.petName;
         this.addChild(this.pet);
     }
 
@@ -101,9 +112,18 @@ class Panel extends egret.DisplayObjectContainer {
         } else if (e.target.text == "armor") {
             this.McCree.equipments.push(this.armor);
             e.target.text = null;
+        }else if(e.target.text == "McCree"){
+            User.user.heroes.push(this.McCree);
+            e.target.text = null;
         }
         this.init();
     }
+
+    onHeroesClick(e: egret.TouchEvent) {
+        this.bag3.text=User.user.heroes.pop().heroName;
+        this.init();
+    }
+
 
     change(changeSth: any) {
 

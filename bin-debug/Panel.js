@@ -18,6 +18,7 @@ var Panel = (function (_super) {
         this.pet = new egret.TextField;
         this.bag1 = new egret.TextField;
         this.bag2 = new egret.TextField;
+        this.bag3 = new egret.TextField;
         this.propertyPanel = new egret.Shape;
         this.bagPanel = new egret.Shape;
         this.propertyPanel.x = 0;
@@ -48,12 +49,19 @@ var Panel = (function (_super) {
         this.addChild(this.bag1);
         this.bag2.text = "armor";
         this.bag2.textColor = 0xffffff;
-        this.bag2.x = this.bagPanel.x + 300;
+        this.bag2.x = this.bagPanel.x + 210;
         this.bag2.y = this.bagPanel.y + 35;
         this.bag2.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onBagClick, this);
         this.bag2.touchEnabled = true;
         this.addChild(this.bag2);
+        this.bag3.text = "";
+        this.bag3.textColor = 0xffffff;
+        this.bag3.x = this.bagPanel.x + 410;
+        this.bag3.y = this.bagPanel.y + 35;
+        this.addChild(this.bag3);
         this.init();
+        this.heroInTeam.addEventListener(egret.TouchEvent.TOUCH_TAP, this.onHeroesClick, this);
+        this.heroInTeam.touchEnabled = true;
     }
     var d = __define,c=Panel,p=c.prototype;
     p.init = function () {
@@ -92,6 +100,14 @@ var Panel = (function (_super) {
             this.McCree.equipments.push(this.armor);
             e.target.text = null;
         }
+        else if (e.target.text == "McCree") {
+            User.user.heroes.push(this.McCree);
+            e.target.text = null;
+        }
+        this.init();
+    };
+    p.onHeroesClick = function (e) {
+        this.bag3.text = User.user.heroes.pop().heroName;
         this.init();
     };
     p.change = function (changeSth) {
